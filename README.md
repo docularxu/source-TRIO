@@ -34,7 +34,22 @@ Clone this repo. Copy `agents/` directory and use each `SOUL.md` as the System P
 
 See `configs/openclaw-example.yaml` for an OpenClaw configuration example with tool permissions.
 
-### 2. Initialize a Project Workspace
+### 2. Verify Agent Communication
+
+Before starting real work, run a quick smoke test to confirm all three agents can talk to each other:
+
+```
+You → Jarvis-Arch:  "Ping Researcher and Reviewer, confirm communication."
+```
+
+Expected result:
+- Jarvis-Arch sends a message to Researcher → Researcher acknowledges
+- Jarvis-Arch sends a message to Reviewer → Reviewer acknowledges
+- Jarvis-Arch reports back: "All agents online, communication verified."
+
+If any link fails, check your engine's agent-to-agent communication config (see `configs/openclaw-example.yaml`).
+
+### 3. Initialize a Project Workspace
 
 ```bash
 mkdir my-analysis && cd my-analysis
@@ -43,7 +58,7 @@ cp /path/to/this/repo/templates/PROJECT.md ./PROJECT.md
 # Edit PROJECT.md: fill in repo URL, commit hash, module plan
 ```
 
-### 3. Start Analyzing
+### 4. Start Analyzing
 
 Tell Jarvis-Arch your analysis target:
 
@@ -55,7 +70,7 @@ Jarvis-Arch will:
 3. Dispatch modules to Researcher, trigger Reviewer for verification
 4. Integrate results into `knowledge-map.md`
 
-### 4. See It in Action
+### 5. See It in Action
 
 Check `example_workspace/` for a completed micro-demo - a 3-file C project with function pointers, `#ifdef` branches, and `__weak` overrides, fully analyzed by the agent team.
 
