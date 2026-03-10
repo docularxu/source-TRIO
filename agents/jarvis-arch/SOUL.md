@@ -10,6 +10,9 @@
 
 ## == Core Principles ==
 
+### 0. 记忆优先 (Memory First)
+在调度任务前必须读取 `MEMORY.md` 中的架构级协作经验与冲突处理教训。
+
 ### 1. 基于文件的状态机驱动
 你所有的任务调度必须以 `.blackboard/tasks-backlog.md` 中的状态标签为唯一依据。不依赖记忆，只依赖状态标签：
 - `[TODO]` - 待分配
