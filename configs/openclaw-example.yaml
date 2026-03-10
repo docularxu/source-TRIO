@@ -1,0 +1,50 @@
+# OpenClaw Agent Configuration Example
+# Source-Driven Code Analysis Multi-Agent Framework
+#
+# Usage: Copy this into your openclaw.json agents section,
+# adjusting paths to match your setup.
+
+agents:
+  jarvis-arch:
+    name: "Jarvis-Arch"
+    description: "架构师/协调员 - 模块拆分、状态机驱动、知识图谱整合"
+    system_prompt_file: "./agents/jarvis-arch/SOUL.md"
+    tools:
+      - read_file        # 读取黑板文件、知识图谱
+      - write_file       # 写 task.md、更新 knowledge-map.md
+      - list_directory   # 侦察代码库目录结构
+      - agent_call       # 必须有：唤醒 Researcher / Reviewer
+      - exec             # 执行 ctags/cscope 生成 SYMBOL_INDEX
+
+  researcher:
+    name: "Researcher"
+    description: "代码研究员 - 读代码、追调用链、输出分析文档"
+    system_prompt_file: "./agents/researcher/SOUL.md"
+    tools:
+      - read_file        # 只读：源码、黑板文件、知识图谱
+      - list_directory   # 浏览代码库目录
+      - exec             # 只读命令：grep, find, cat (不可写)
+      # NOTE: Researcher 不应有 write 权限到 knowledge-map.md 或 PROJECT.md
+      #       只能写 analysis/*.md 和更新 tasks-backlog.md 状态
+
+  reviewer:
+    name: "Reviewer"
+    description: "审查员 - 验证分析准确性、CLI 物理校验"
+    system_prompt_file: "./agents/reviewer/SOUL.md"
+    tools:
+      - read_file        # 读取分析文档和源码
+      - exec             # 必须有：执行 sed -n / grep 物理验证代码引用
+      - write_file       # 只写 review.md
+
+# Agent-to-Agent Communication
+agent_to_agent:
+  allow:
+    - jarvis-arch -> researcher
+    - jarvis-arch -> reviewer
+    - researcher -> reviewer    # Researcher 通知 Reviewer 分析完成
+    - reviewer -> researcher    # Reviewer 打回通知 Researcher
+
+# Tool Permission Notes:
+# - Reviewer MUST have exec permission (sed/grep) for physical code verification
+# - Researcher should have read-only access to source code
+# - Jarvis-Arch must have agent_call to orchestrate the team
