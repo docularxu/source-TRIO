@@ -53,7 +53,7 @@ If any link fails, check your engine's agent-to-agent communication config (see 
 
 Point Jarvis-Arch to a source code project (an existing local clone or a GitHub repo URL):
 
-> "Analyze the USB initialization subsystem in ~/src/u-boot/. Start with reconnaissance."
+> "Analyze the dummy-c-project at example_workspace/dummy-c-project/. Focus on tracing the init flow in main() to find out which hardware register address is actually being operated on."
 
 Jarvis-Arch will handle the rest (Phase 1 - Reconnaissance):
 1. Align the analysis scope with you through conversation
