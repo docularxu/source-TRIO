@@ -26,6 +26,9 @@
 #         "identity": {
 #           "name": "Jarvis-Arch",
 #           "emoji": "⚡"
+#         },
+#         "subagents": {
+#           "allowAgents": ["researcher", "reviewer"]
 #         }
 #       },
 #       {
@@ -57,6 +60,10 @@
 #     ]
 #   }
 # }
+#
+# KEY: "subagents.allowAgents" on Jarvis-Arch is what lets it spawn
+# Researcher and Reviewer as sub-agents. Without this, Jarvis-Arch
+# can only see itself when calling agents_list.
 
 # ─────────────────────────────────────────────
 # 2. Agent-to-Agent Communication
@@ -73,13 +80,22 @@
 #   }
 # }
 #
-# Communication flow:
-#   jarvis-arch  → researcher   (assign analysis task)
-#   jarvis-arch  → reviewer     (trigger review)
-#   researcher   → reviewer     (notify analysis complete)
-#   reviewer     → researcher   (send back review feedback)
+# Communication methods (two options):
 #
-# All agents use sessions_send or CLI:
+#   a) sessions_send  - direct message to another agent's session
+#      Used for: notifications, status updates, lightweight pings
+#
+#   b) sessions_spawn - spawn another agent as a sub-agent with a task
+#      Used for: delegating analysis work, triggering reviews
+#      Requires: "subagents.allowAgents" on the calling agent (see above)
+#
+# Communication flow:
+#   jarvis-arch  → researcher   (spawn: assign analysis task)
+#   jarvis-arch  → reviewer     (spawn: trigger review)
+#   researcher   → reviewer     (send: notify analysis complete)
+#   reviewer     → researcher   (send: review feedback)
+#
+# CLI equivalent:
 #   openclaw agent --agent researcher --message "Analyze module X, see task.md"
 
 # ─────────────────────────────────────────────
@@ -92,7 +108,8 @@
 # Jarvis-Arch:
 #   - read/write .blackboard/ files (tasks-backlog.md, knowledge-map.md, task.md)
 #   - exec: ctags/cscope for SYMBOL_INDEX.md generation
-#   - sessions_send: orchestrate Researcher and Reviewer
+#   - sessions_spawn: orchestrate Researcher and Reviewer as sub-agents
+#   - sessions_send: lightweight messaging to other agents
 #   - SOUL.md forbids: deep code analysis (delegate to Researcher)
 #
 # Researcher:
