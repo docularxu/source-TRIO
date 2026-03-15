@@ -164,6 +164,8 @@ source-driven-agent-framework/
 
 ## Three-Phase Workflow
 
+![Three-Phase Analysis Flow](images/phase-diagram.png)
+
 | Phase | Input | Output | Gate |
 |-------|-------|--------|------|
 | **1. Reconnaissance** | Analysis target + codebase access | PROJECT.md, tasks-backlog.md, knowledge-map.md (initial), SYMBOL_INDEX.md | Reviewer pass + Owner sign-off |
