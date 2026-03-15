@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="700" height="680" viewBox="0 0 700 680">
+<svg xmlns="http://www.w3.org/2000/svg" width="700" height="720" viewBox="0 0 700 720">
   <rect width="700" height="680" fill="#0d1117" rx="12"/>
 
   <defs>
@@ -94,26 +94,34 @@
   <path d="M 470 466 L 470 495 L 135 495 L 135 374" fill="none" stroke="#58a6ff" stroke-width="1.5" marker-end="url(#aBlue)"/>
   <text x="300" y="509" text-anchor="middle" fill="#58a6ff" font-size="10" font-weight="bold" font-family="sans-serif">Next module</text>
 
+  <!-- Phase 2 output -->
+  <rect x="130" y="510" width="340" height="22" rx="6" fill="#161b22" stroke="#30363d"/>
+  <text x="300" y="525" text-anchor="middle" fill="#8b949e" font-size="9" font-family="sans-serif">Output: analysis/NN-module.md + review.md + knowledge-map.md (updated)</text>
+
   <!-- Arrow to Phase 3 -->
-  <line x1="350" y1="520" x2="350" y2="548" stroke="#8b949e" stroke-width="1.5" marker-end="url(#a)"/>
+  <line x1="350" y1="532" x2="350" y2="558" stroke="#8b949e" stroke-width="1.5" marker-end="url(#a)"/>
 
   <!-- Phase 3 -->
-  <rect x="40" y="548" width="620" height="80" rx="10" fill="none" stroke="#8b5cf6" stroke-width="1.5" stroke-dasharray="6,3"/>
-  <text x="60" y="569" fill="#8b5cf6" font-size="12" font-weight="bold" font-family="sans-serif">Phase 3: Final Report</text>
+  <rect x="40" y="558" width="620" height="100" rx="10" fill="none" stroke="#8b5cf6" stroke-width="1.5" stroke-dasharray="6,3"/>
+  <text x="60" y="579" fill="#8b5cf6" font-size="12" font-weight="bold" font-family="sans-serif">Phase 3: Final Report</text>
 
   <!-- Architect integrates -->
-  <rect x="120" y="582" width="200" height="34" rx="8" fill="#f0883e"/>
-  <text x="220" y="604" text-anchor="middle" fill="#fff" font-size="11" font-weight="bold" font-family="sans-serif">Architect: REPORT.md</text>
+  <rect x="120" y="592" width="200" height="34" rx="8" fill="#f0883e"/>
+  <text x="220" y="614" text-anchor="middle" fill="#fff" font-size="11" font-weight="bold" font-family="sans-serif">Architect: REPORT.md</text>
 
   <!-- Boss sign-off -->
-  <rect x="380" y="582" width="130" height="34" rx="8" fill="#8b5cf6"/>
-  <text x="445" y="604" text-anchor="middle" fill="#fff" font-size="11" font-weight="bold" font-family="sans-serif">Boss Sign-off</text>
+  <rect x="380" y="592" width="130" height="34" rx="8" fill="#8b5cf6"/>
+  <text x="445" y="614" text-anchor="middle" fill="#fff" font-size="11" font-weight="bold" font-family="sans-serif">Boss Sign-off</text>
 
-  <line x1="320" y1="599" x2="380" y2="599" stroke="#8b949e" stroke-width="1.5" marker-end="url(#a)"/>
+  <line x1="320" y1="609" x2="380" y2="609" stroke="#8b949e" stroke-width="1.5" marker-end="url(#a)"/>
+
+  <!-- Phase 3 output -->
+  <rect x="180" y="636" width="240" height="22" rx="6" fill="#161b22" stroke="#30363d"/>
+  <text x="300" y="651" text-anchor="middle" fill="#8b949e" font-size="9" font-family="sans-serif">Output: REPORT.md (publishable)</text>
 
   <!-- Final output -->
-  <rect x="220" y="645" width="260" height="28" rx="14" fill="#238636"/>
-  <text x="350" y="664" text-anchor="middle" fill="#fff" font-size="11" font-weight="bold" font-family="sans-serif">Complete Analysis Report</text>
+  <rect x="220" y="680" width="260" height="28" rx="14" fill="#238636"/>
+  <text x="350" y="699" text-anchor="middle" fill="#fff" font-size="11" font-weight="bold" font-family="sans-serif">Complete Analysis Report</text>
 
-  <line x1="445" y1="616" x2="350" y2="645" stroke="#8b949e" stroke-width="1.5" marker-end="url(#a)"/>
+  <line x1="300" y1="658" x2="350" y2="680" stroke="#8b949e" stroke-width="1.5" marker-end="url(#a)"/>
 </svg>
