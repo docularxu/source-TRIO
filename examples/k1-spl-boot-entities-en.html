@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>K1 SPL Boot - Entity Relationships & Address Space</title>
+<style>
+  body { margin: 20px; background: #1a1a2e; font-family: -apple-system, sans-serif; }
+  svg { display: block; margin: 0 auto; margin-bottom: 30px; }
+  h2 { color: #e0e0e0; text-align: center; margin-top: 40px; }
+</style>
+</head>
+<body>
+
+<!-- ============ 图一: 四个实体关系 ============ -->
+<svg viewBox="0 0 1000 720" width="1000" height="720" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 6" refX="10" refY="3"
+            markerWidth="10" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,3 L0,6 z" fill="#e0e0e0"/>
+    </marker>
+    <marker id="arrow-orange" viewBox="0 0 10 6" refX="10" refY="3"
+            markerWidth="10" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,3 L0,6 z" fill="#f59e0b"/>
+    </marker>
+    <marker id="arrow-cyan" viewBox="0 0 10 6" refX="10" refY="3"
+            markerWidth="10" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,3 L0,6 z" fill="#22d3ee"/>
+    </marker>
+  </defs>
+
+  <text x="500" y="35" text-anchor="middle" fill="#e0e0e0" font-size="20" font-weight="bold">K1 SPL Boot Flow — Four Entities & Relationships</text>
+
+  <!-- Entity 1: Host -->
+  <rect x="30" y="70" width="260" height="220" rx="12" fill="#16213e" stroke="#4a6fa5" stroke-width="2"/>
+  <text x="160" y="95" text-anchor="middle" fill="#8ab4f8" font-size="15" font-weight="bold">① Build Artifacts (Host)</text>
+  <rect x="50" y="110" width="220" height="50" rx="6" fill="#1e3a5f" stroke="#5b8bd4" stroke-width="1.5"/>
+  <text x="160" y="132" text-anchor="middle" fill="#c8ddf8" font-size="13" font-weight="bold">u-boot-spl-ddr.bin</text>
+  <text x="160" y="150" text-anchor="middle" fill="#8ab4f8" font-size="11">SPL code + ddr_fw.bin (binman packed)</text>
+  <rect x="50" y="215" width="220" height="50" rx="6" fill="#1e3a5f" stroke="#5b8bd4" stroke-width="1.5"/>
+  <text x="160" y="237" text-anchor="middle" fill="#c8ddf8" font-size="13" font-weight="bold">FSBL.bin</text>
+  <text x="160" y="255" text-anchor="middle" fill="#8ab4f8" font-size="11">Signed boot image</text>
+  <line x1="160" y1="160" x2="160" y2="215" stroke="#e0e0e0" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="175" y="192" fill="#aaa" font-size="10">build_binary_file.py</text>
+
+  <!-- Entity 2: K1 SoC -->
+  <rect x="370" y="70" width="600" height="440" rx="16" fill="#0f1b2d" stroke="#f59e0b" stroke-width="2.5"/>
+  <text x="670" y="95" text-anchor="middle" fill="#f59e0b" font-size="16" font-weight="bold">② K1 SoC (On-chip)</text>
+  <rect x="400" y="110" width="160" height="45" rx="6" fill="#2d1810" stroke="#f59e0b" stroke-width="1.5"/>
+  <text x="480" y="132" text-anchor="middle" fill="#fcd34d" font-size="13" font-weight="bold">BootROM</text>
+  <text x="480" y="148" text-anchor="middle" fill="#c2884a" font-size="10">128KB</text>
+
+  <!-- SRAM -->
+  <rect x="400" y="190" width="540" height="220" rx="10" fill="#162032" stroke="#22d3ee" stroke-width="2"/>
+  <text x="670" y="215" text-anchor="middle" fill="#22d3ee" font-size="14" font-weight="bold">③ SRAM (On-chip, 256KB, available at power-on)</text>
+  <rect x="420" y="230" width="240" height="55" rx="5" fill="#1a2744" stroke="#60a5fa" stroke-width="1"/>
+  <text x="540" y="250" text-anchor="middle" fill="#93c5fd" font-size="12" font-weight="bold">SPL Code (.text)</text>
+  <text x="540" y="268" text-anchor="middle" fill="#6b9bd2" font-size="10">0xC080,1000 ~ max 204KB</text>
+  <rect x="420" y="290" width="240" height="40" rx="5" fill="#2a1a3a" stroke="#a78bfa" stroke-width="1" stroke-dasharray="4,3"/>
+  <text x="540" y="308" text-anchor="middle" fill="#c4b5fd" font-size="11">ddr_fw (embedded in image)</text>
+  <text x="540" y="322" text-anchor="middle" fill="#8b7bc8" font-size="9">binman_sym offset locating</text>
+  <rect x="700" y="270" width="220" height="55" rx="5" fill="#1a2d1a" stroke="#4ade80" stroke-width="1.5"/>
+  <text x="810" y="290" text-anchor="middle" fill="#86efac" font-size="12" font-weight="bold">DDR FW Execution Area</text>
+  <text x="810" y="308" text-anchor="middle" fill="#4ade80" font-size="10">0xC082,D000</text>
+  <path d="M 660 310 Q 680 340 700 300" fill="none" stroke="#4ade80" stroke-width="1.5" marker-end="url(#arrow-cyan)" stroke-dasharray="5,3"/>
+  <text x="688" y="348" fill="#4ade80" font-size="10" font-weight="bold">memcpy</text>
+  <rect x="420" y="340" width="120" height="55" rx="5" fill="#1a2744" stroke="#60a5fa" stroke-width="1"/>
+  <text x="480" y="360" text-anchor="middle" fill="#93c5fd" font-size="11">BSS / Stack</text>
+  <text x="480" y="378" text-anchor="middle" fill="#6b9bd2" font-size="9">gd / heap</text>
+  <text x="480" y="392" text-anchor="middle" fill="#6b9bd2" font-size="9">→ 0xC084,0000</text>
+
+  <!-- DDR Controller -->
+  <rect x="580" y="430" width="240" height="55" rx="8" fill="#2d1f10" stroke="#fb923c" stroke-width="1.5"/>
+  <text x="700" y="450" text-anchor="middle" fill="#fdba74" font-size="13" font-weight="bold">DDR Controller</text>
+  <text x="700" y="466" text-anchor="middle" fill="#c2884a" font-size="10">4 AXI ports · LPDDR3/4 · DFC</text>
+  <text x="700" y="480" text-anchor="middle" fill="#c2884a" font-size="9">ddr_init(0xC000,0000, cs, rate, puts)</text>
+
+  <!-- Arrows -->
+  <line x1="480" y1="155" x2="480" y2="190" stroke="#f59e0b" stroke-width="1.5" marker-end="url(#arrow-orange)"/>
+  <text x="490" y="178" fill="#f59e0b" font-size="10">Load FSBL</text>
+  <path d="M 810 325 L 810 410 Q 810 440 780 450 L 800 450" fill="none" stroke="#4ade80" stroke-width="1.5" marker-end="url(#arrow-cyan)"/>
+  <text x="825" y="390" fill="#4ade80" font-size="10">Function pointer call</text>
+  <text x="825" y="403" fill="#4ade80" font-size="10">ddr_init()</text>
+  <line x1="270" y1="240" x2="400" y2="133" stroke="#e0e0e0" stroke-width="1.5" marker-end="url(#arrow)" stroke-dasharray="6,3"/>
+  <text x="310" y="175" fill="#aaa" font-size="11">USB fastboot /</text>
+  <text x="310" y="190" fill="#aaa" font-size="11">SPI NOR etc.</text>
+
+  <!-- Entity 4: DDR Memory -->
+  <rect x="370" y="550" width="600" height="130" rx="12" fill="#1a0f2e" stroke="#a78bfa" stroke-width="2.5"/>
+  <text x="670" y="578" text-anchor="middle" fill="#a78bfa" font-size="16" font-weight="bold">④ DDR Memory Chip (External to SoC)</text>
+  <rect x="400" y="595" width="540" height="65" rx="6" fill="#1e1535" stroke="#7c3aed" stroke-width="1"/>
+  <text x="670" y="618" text-anchor="middle" fill="#c4b5fd" font-size="13">LPDDR4X · max 16GB · CPU view: low 2GB @ 0x0, high @ 0x1,0000,0000</text>
+  <text x="670" y="640" text-anchor="middle" fill="#8b7bc8" font-size="11">BPI-F3: 2GB (memory@0, reg = &lt;0 0 0 0x8000,0000&gt;)</text>
+  <line x1="700" y1="485" x2="700" y2="550" stroke="#fb923c" stroke-width="2" marker-end="url(#arrow-orange)"/>
+  <text x="715" y="520" fill="#fb923c" font-size="11" font-weight="bold">DDR training</text>
+  <text x="715" y="535" fill="#c2884a" font-size="10">Read/write training + 2400MT/s</text>
+  <path d="M 670 485 Q 500 530 500 550" fill="none" stroke="#a78bfa" stroke-width="1.2" stroke-dasharray="4,3" marker-end="url(#arrow)"/>
+  <text x="505" y="530" fill="#a78bfa" font-size="10">Verify: write 0xAA55,AA55 → read back</text>
+
+  <!-- Legend -->
+  <rect x="30" y="560" width="260" height="140" rx="8" fill="#111827" stroke="#374151" stroke-width="1"/>
+  <text x="50" y="582" fill="#9ca3af" font-size="12" font-weight="bold">Legend</text>
+  <rect x="50" y="592" width="12" height="12" fill="#16213e" stroke="#4a6fa5" stroke-width="1"/>
+  <text x="70" y="603" fill="#8ab4f8" font-size="11">① Build Artifacts (Host PC)</text>
+  <rect x="50" y="612" width="12" height="12" fill="#0f1b2d" stroke="#f59e0b" stroke-width="1"/>
+  <text x="70" y="623" fill="#f59e0b" font-size="11">② K1 SoC (On-chip Logic)</text>
+  <rect x="50" y="632" width="12" height="12" fill="#162032" stroke="#22d3ee" stroke-width="1"/>
+  <text x="70" y="643" fill="#22d3ee" font-size="11">③ SRAM (On-chip Memory)</text>
+  <rect x="50" y="652" width="12" height="12" fill="#1a0f2e" stroke="#a78bfa" stroke-width="1"/>
+  <text x="70" y="663" fill="#a78bfa" font-size="11">④ DDR Chip (External on Board)</text>
+  <line x1="50" y1="680" x2="80" y2="680" stroke="#e0e0e0" stroke-width="1.5" stroke-dasharray="6,3"/>
+  <text x="90" y="684" fill="#9ca3af" font-size="10">Cross-entity transfer</text>
+  <line x1="50" y1="694" x2="80" y2="694" stroke="#4ade80" stroke-width="1.5" stroke-dasharray="5,3"/>
+  <text x="90" y="698" fill="#4ade80" font-size="10">Intra-SRAM relocation</text>
+</svg>
+
+<!-- ============ 图二: CPU 视角地址空间 ============ -->
+<svg viewBox="0 0 1000 880" width="1000" height="880" xmlns="http://www.w3.org/2000/svg">
+  <text x="320" y="35" text-anchor="middle" fill="#e0e0e0" font-size="20" font-weight="bold">K1 CPU View — Physical Address Space Layout</text>
+
+  <!-- 左侧地址列 (x=20~150), 右侧内容框 (x=170~600) -->
+
+  <!-- ====== DRAM 低段 ====== -->
+  <text x="20" y="72" fill="#9ca3af" font-size="11" text-anchor="start">0x0000,0000</text>
+  <rect x="110" y="60" width="420" height="210" rx="6" fill="#1e1535" stroke="#a78bfa" stroke-width="2"/>
+  <text x="320" y="85" text-anchor="middle" fill="#c4b5fd" font-size="14" font-weight="bold">DRAM Low Segment (0 ~ 2GB)</text>
+
+  <text x="20" y="112" fill="#7c7c9a" font-size="10">0x0000,0000</text>
+  <rect x="130" y="100" width="380" height="25" rx="4" fill="#2d1a4a" stroke="#7c3aed" stroke-width="1"/>
+  <text x="140" y="117" fill="#a78bfa" font-size="11">SDRAM_BASE</text>
+
+  <text x="20" y="142" fill="#7c7c9a" font-size="10">0x0020,0000</text>
+  <rect x="130" y="130" width="380" height="25" rx="4" fill="#2d1a4a" stroke="#7c3aed" stroke-width="1"/>
+  <text x="140" y="147" fill="#a78bfa" font-size="11">SYS_LOAD_ADDR — U-Boot proper load address</text>
+
+  <text x="20" y="172" fill="#7c7c9a" font-size="10">0x0100,0000</text>
+  <rect x="130" y="160" width="380" height="25" rx="4" fill="#2d1a4a" stroke="#7c3aed" stroke-width="1"/>
+  <text x="140" y="177" fill="#a78bfa" font-size="11">INIT_SP — U-Boot proper initial stack (16MB)</text>
+
+  <rect x="130" y="190" width="380" height="25" rx="4" fill="#2d1a4a" stroke="#7c3aed" stroke-width="1"/>
+  <text x="140" y="207" fill="#a78bfa" font-size="11">DDR verify address (write 0xAA55,AA55)</text>
+
+  <text x="320" y="248" text-anchor="middle" fill="#8b7bc8" font-size="10">BPI-F3: entire 2GB DDR falls in this segment</text>
+
+  <!-- ====== Device IO ====== -->
+  <text x="20" y="282" fill="#9ca3af" font-size="11">0x8000,0000</text>
+  <rect x="110" y="275" width="420" height="370" rx="6" fill="#1a2210" stroke="#f59e0b" stroke-width="2"/>
+  <text x="320" y="298" text-anchor="middle" fill="#fcd34d" font-size="14" font-weight="bold">Device IO Space (2 ~ 4GB)</text>
+
+  <!-- ddrc -->
+  <text x="20" y="325" fill="#7c7c9a" font-size="10">0xC000,0000</text>
+  <rect x="130" y="312" width="380" height="35" rx="4" fill="#2d1f10" stroke="#fb923c" stroke-width="1"/>
+  <text x="140" y="329" fill="#fdba74" font-size="11" font-weight="bold">ddrc Register Region (0x4280)</text>
+  <text x="140" y="342" fill="#c2884a" font-size="9">ddr_init() first parameter · exact usage determined by blob</text>
+
+  <!-- SRAM -->
+  <text x="20" y="368" fill="#22d3ee" font-size="10" font-weight="bold">0xC080,0000</text>
+  <rect x="130" y="355" width="380" height="170" rx="4" fill="#162032" stroke="#22d3ee" stroke-width="1.5"/>
+  <text x="140" y="373" fill="#22d3ee" font-size="11" font-weight="bold">SRAM (256KB, shared by Main CPU + Real CPU)</text>
+
+  <text x="20" y="393" fill="#5a8a8a" font-size="9">0xC080,1000</text>
+  <text x="145" y="393" fill="#67c8d8" font-size="10">SPL code (.text, 204KB max)</text>
+  <text x="20" y="409" fill="#5a8a8a" font-size="9">0xC082,D000</text>
+  <text x="145" y="409" fill="#67c8d8" font-size="10">DDR FW Execution Area</text>
+  <text x="20" y="425" fill="#5a8a8a" font-size="9">0xC083,7000</text>
+  <text x="145" y="425" fill="#67c8d8" font-size="10">BSS (8KB)</text>
+  <text x="20" y="441" fill="#5a8a8a" font-size="9">0xC083,9000</text>
+  <text x="145" y="441" fill="#67c8d8" font-size="10">Stack / gd</text>
+  <text x="20" y="457" fill="#5a8a8a" font-size="9">0xC083,B000</text>
+  <text x="145" y="457" fill="#67c8d8" font-size="10">heap (20KB)</text>
+  <text x="20" y="473" fill="#5a8a8a" font-size="9">0xC084,0000</text>
+  <text x="145" y="473" fill="#67c8d8" font-size="10">SPL_STACK (initial SP)</text>
+  <text x="145" y="492" fill="#4a9eaa" font-size="9">↑ Allocation direction: heap → gd → stack</text>
+  <text x="145" y="506" fill="#4a9eaa" font-size="9">↑ DDR FW at end of code area, memcpy here to execute</text>
+
+  <!-- Peripherals -->
+  <text x="20" y="540" fill="#7c7c9a" font-size="10">0xD400,0000+</text>
+  <rect x="130" y="528" width="380" height="35" rx="4" fill="#1a2210" stroke="#84cc16" stroke-width="1"/>
+  <text x="140" y="545" fill="#bef264" font-size="11" font-weight="bold">Peripheral Registers</text>
+  <text x="140" y="558" fill="#a3c44a" font-size="9">UART, I2C, Clock, GPIO, PMIC...</text>
+
+  <rect x="130" y="570" width="380" height="25" rx="4" fill="#1a2210" stroke="#f59e0b" stroke-width="0.5" stroke-dasharray="3,3"/>
+  <text x="320" y="587" text-anchor="middle" fill="#a08840" font-size="10">...</text>
+
+  <!-- Connecting line from address column to boxes -->
+  <line x1="103" y1="60" x2="103" y2="850" stroke="#333" stroke-width="1" stroke-dasharray="2,4"/>
+
+  <!-- ====== DRAM 高段 ====== -->
+  <text x="20" y="660" fill="#9ca3af" font-size="11">0x1,0000,0000</text>
+  <rect x="110" y="650" width="420" height="120" rx="6" fill="#1e1535" stroke="#a78bfa" stroke-width="2"/>
+  <text x="320" y="678" text-anchor="middle" fill="#c4b5fd" font-size="14" font-weight="bold">DRAM High Segment (4 ~ 18GB)</text>
+  <text x="320" y="700" text-anchor="middle" fill="#8b7bc8" font-size="11">Maps to physical DRAM 2 ~ 16GB</text>
+  <text x="320" y="720" text-anchor="middle" fill="#8b7bc8" font-size="11">BPI-F3 has only 2GB DDR, this segment unused</text>
+  <text x="320" y="740" text-anchor="middle" fill="#6b5b98" font-size="10">K1 supports up to 16GB DDR</text>
+  <text x="20" y="782" fill="#9ca3af" font-size="11">0x4,8000,0000</text>
+
+  <!-- Key note -->
+  <text x="320" y="815" text-anchor="middle" fill="#818cf8" font-size="10">DRAM split by Device IO into two segments: low 2GB (0x0) + high 14GB (0x1,0000,0000)</text>
+  <text x="320" y="833" text-anchor="middle" fill="#818cf8" font-size="10">Different bus masters have different addressing capability (USB 2GB / GPU 16GB / PCIe 16GB / DMA 16GB)</text>
+
+  <!-- Source note -->
+  <text x="500" y="870" text-anchor="middle" fill="#4b5563" font-size="10">Data source: K1x DDR memory space mapping doc (SpacemiT) + defconfig + DTS</text>
+</svg>
+
+</body>
+</html>
