@@ -194,7 +194,11 @@
         <ul>
             <li><a href="#annotation-1" class="red">🔴 Clarifying Patch Scope with Human</a></li>
             <li><a href="#annotation-2" class="green">🟢 Human Guides Agent to Build Dashboard</a></li>
+            <li><a href="#annotation-4" class="red">🔴 Lack of Observability</a></li>
+            <li><a href="#annotation-5" class="red">🔴 Cascade Risk from Parallelism</a></li>
+            <li><a href="#annotation-6" class="red">🔴 Lost Notifications Stall Workflow</a></li>
             <li><a href="#annotation-3" class="red">🔴 Researcher Fabrication</a></li>
+            <li><a href="#annotation-7" class="red">🔴 File Exists ≠ Task Complete</a></li>
         </ul>
         <h2>Main Phases</h2>
         <ul>
@@ -749,6 +753,14 @@ Overall progress:
 • M2-M7 all [TODO]
 I'll send M1 to Reviewer for audit now, and can dispatch M2 to Researcher in parallel. Proceed this way?</div>
             </div>
+            <div class="annotation red" id="annotation-4">
+                <div class="annotation-title">Lack of Observability: Human pushes Agent to build progress and comms logs</div>
+                <div class="annotation-body">
+                    The Agent completed M1 analysis but had no progress logs whatsoever. The human asked two consecutive questions: (1) "Do you have any logs?" → Agent admits the oversight, creates progress.md; (2) "How do I know you're actually using them?" → Agent adds comms.md communication log.
+                    <br><br>
+                    <b>Observability was not established proactively by the Agent - it was only built after the human explicitly demanded it.</b> This shows that current Agents lack awareness of "making their work process visible to humans", and this needs to be built into the framework by default.
+                </div>
+            </div>
             <div class="msg human" id="msg-74">
                 <span class="time">18:43</span>
                 <div class="sender">Docular M</div>
@@ -914,10 +926,18 @@ Now updating M1 status to Done, updating knowledge map:</div>
 • M3 Research → Researcher analyzing (largest module, 600s timeout)
 Waiting for results to continue driving.</div>
             </div>
+            <div class="annotation red" id="annotation-5">
+                <div class="annotation-title">Cascade Risk from Parallelism: Human raises a critical architecture question</div>
+                <div class="annotation-body">
+                    The human astutely identifies a potential risk of parallel execution: if the Reviewer finds errors in an upstream module, but the Researcher is already analyzing a downstream module based on (potentially incorrect) upstream conclusions, what happens?
+                    <br><br>
+                    The Agent provides a reasonable analysis (weak dependencies can be parallelized, strong dependencies need serialization), but <b>this risk was raised by the human, not identified by the Agent itself</b>. The human's instruction to "just record it, don't solve it now" demonstrates mature project management judgment.
+                </div>
+            </div>
             <div class="msg human" id="msg-102">
                 <span class="time">18:54</span>
                 <div class="sender">Docular M</div>
-                <div class="content">If the reviewer finds issues during audit, but the researcher is already working on the next milestone and can't go back to adjust - isn't that a problem?</div>
+                <div class="content">If the reviewer finds issues during audit, but the researcher is already working on the next milestone and can't go back to adjust — isn't that a problem?</div>
             </div>
             <div class="msg agent" id="msg-103">
                 <span class="time">18:54</span>
@@ -1119,6 +1139,14 @@ Summary:
 | M7 DDR Init        | 🔲 TODO      |                |
 4/7 complete, M5 will be sent to Review after Researcher returns + dispatch M6 in parallel. Estimated 15-20 minutes to complete all.</div>
             </div>
+            <div class="annotation red" id="annotation-6">
+                <div class="annotation-title">Lost Notifications Stall the Workflow</div>
+                <div class="annotation-body">
+                    The M5 Researcher actually completed at 07:46 (output file already written), but the completion notification was never delivered to the Arch Agent. Arch's session is passive - it only wakes up when it receives a message - causing nearly 50 minutes of idle waiting after the task was done, until the human asked "why is M5 taking so long?"
+                    <br><br>
+                    This issue occurred <b>at least twice</b> during the project (M5 and M6), exposing an inherent flaw in the Multi-Agent framework: <b>unreliable message notifications + passive session model</b>. The human later asked again "why did I have to prompt you to make corrections?" and the Agent acknowledged this as an architectural-level problem.
+                </div>
+            </div>
             <div class="msg human" id="msg-131">
                 <span class="time">20:36</span>
                 <div class="sender">Docular M</div>
@@ -1180,6 +1208,14 @@ M6 task complete. Analysis written to analysis/m6-pmic-regulator.md, covering:
 3. Register layout - 3 registers per regulator type (CTRL/VSEL/SVSEL), n×3 offset addressing
 4. SPL power init - pmic_init() called before DDR, configures vdd_core (BUCK1, enable only), vdd_1v8 (BUCK3, set 1.8V), vdd_1v8_mmc (ALDO1, enable only)
 5. DTS - changed from generic "pmic" compatible to "spacemit,p1", added complete regulators sub-nodes, only 3 rails marked bootph-pre-ram</div>
+            </div>
+            <div class="annotation red" id="annotation-7">
+                <div class="annotation-title">File Exists ≠ Task Complete: Human corrects Agent's flawed assumption</div>
+                <div class="annotation-body">
+                    After the notification loss incident, the Agent concluded with a "core principle: file exists = task complete." The human immediately pushes back: a file could have just been started and not finished yet - you can't equate existence with completion.
+                    <br><br>
+                    <b>The Agent extracted an incorrect general principle from a specific incident.</b> The human's correction forced the Agent to revise its retro entry to "the correct approach is to check status via subagents list." This demonstrates the human's quality-gating role in the Agent's learning process - correcting not just behavior, but also the flawed rules the Agent derives from that behavior.
+                </div>
             </div>
             <div class="msg human" id="msg-141">
                 <span class="time">20:40</span>
