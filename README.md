@@ -30,6 +30,8 @@ Looking for code **development** instead of analysis? Check out [agent-TRIO](htt
 
 4. **Blackboard State Machine**: All workflow progression is driven by file-based state tags (`[TODO]` → `[Analyzing]` → `[Reviewing]` → `[Done]`), not by agent memory. This enables crash recovery and deterministic flow control.
 
+5. **Protocol Layering**: Agent identity (SOUL.md) is separated from workflow rules (PROTOCOL.md). The protocol is automatically injected into every agent session via AGENTS.md, ensuring agents follow the design - not a compressed summary of it.
+
 ## 👥 The Agent Team
 
 A "permanent team, rotating projects" approach - the agents persist across projects, accumulating expertise over time.
@@ -51,15 +53,15 @@ There are two ways to deploy:
 
 **Option A: Let your AI agent do it.** Clone this repo, then tell your existing AI agent:
 
-> "Read the README and configs at `~/source-driven-agent-framework/`. Set up the three agents (Jarvis-Arch, Researcher, Reviewer) with their SOUL.md files, configure communication, and verify everything works."
+> "Read the README at `~/source-TRIO/`. Set up the three agents (Jarvis-Arch, Researcher, Reviewer) with their SOUL.md, AGENTS.md, shared PROTOCOL.md, and guard.sh. Configure communication and verify everything works."
 
 Your agent reads this repo, executes all the steps below, and reports back. You describe the intent, the agent handles the rest. This is how deployment works in the AI agent era.
 
 **Option B: Do it yourself.** The detailed steps below are written so that either an AI agent or a human can follow them. If you prefer hands-on control, or if your agent needs a reference, here they are:
 
-### 1. Deploy the Prompts
+### 1. Deploy the Team
 
-Clone this repo. Copy each agent's `SOUL.md` into their OpenClaw workspace:
+Clone this repo. Create the agents and deploy all files:
 
 ```bash
 # Create agents
@@ -67,13 +69,27 @@ openclaw agents add jarvis-arch --model <your-model-id>
 openclaw agents add researcher --model <your-model-id>
 openclaw agents add reviewer --model <your-model-id>
 
-# Install SOUL.md
-cp agents/jarvis-arch/SOUL.md ~/.openclaw/agents/jarvis-arch/SOUL.md
-cp agents/researcher/SOUL.md  ~/.openclaw/agents/researcher/SOUL.md
-cp agents/reviewer/SOUL.md    ~/.openclaw/agents/reviewer/SOUL.md
+# Deploy shared protocol (one copy, shared by all agents)
+mkdir -p ~/.openclaw/agents/shared/
+cp PROTOCOL.md ~/.openclaw/agents/shared/PROTOCOL.md
+cp guard.sh    ~/.openclaw/agents/shared/guard.sh
+
+# Deploy per-agent files (SOUL.md + AGENTS.md + symlinks)
+for agent in jarvis-arch researcher reviewer; do
+  cp agents/$agent/SOUL.md    ~/.openclaw/agents/$agent/SOUL.md
+  cp agents/$agent/AGENTS.md  ~/.openclaw/agents/$agent/AGENTS.md
+  ln -sf ~/.openclaw/agents/shared/PROTOCOL.md ~/.openclaw/agents/$agent/PROTOCOL.md
+  ln -sf ~/.openclaw/agents/shared/guard.sh    ~/.openclaw/agents/$agent/guard.sh
+done
 ```
 
-See `configs/openclaw-example.yaml` for a full configuration example with tool permissions.
+Each agent gets:
+- **SOUL.md** - Identity and personality ("who you are")
+- **AGENTS.md** - Auto-injected startup instructions (points to PROTOCOL.md)
+- **PROTOCOL.md** - Workflow protocol, state machine rules, communication sequences (symlink to shared copy)
+- **guard.sh** - Code-level enforcement for critical rules (symlink to shared copy)
+
+See `configs/openclaw-example.yaml` for a full configuration example with model choices and tool permissions.
 
 ### 2. Verify Agent Communication
 
@@ -98,7 +114,7 @@ Point Jarvis-Arch to a source code project (an existing local clone or a GitHub 
 
 Jarvis-Arch will handle the rest (Phase 1 - Reconnaissance):
 1. Align the analysis scope with you through conversation
-2. Initialize the workspace using templates (`PROJECT.md`, `.blackboard/`, etc.)
+2. Initialize the project workspace (`.blackboard/`, `PROJECT.md`, etc.)
 3. Scout the codebase, produce `PROJECT.md` + `SYMBOL_INDEX.md`
 4. Submit the plan to Reviewer, then ask you for sign-off
 
@@ -106,7 +122,7 @@ After sign-off, Phase 2 begins automatically:
 5. Dispatch modules to Researcher, trigger Reviewer for verification
 6. Integrate results into `knowledge-map.md`
 
-> **Tip**: Templates in `templates/` are reference copies. You can also manually initialize a workspace with `cp -r templates/blackboard/ .blackboard/` if you prefer hands-on setup.
+From this point on, you don't need the git clone anymore. Everything the agents need is deployed in their workspaces.
 
 ### 4. See It in Action
 
@@ -117,16 +133,24 @@ After your agents finish, compare your results against `example_output/dummy-c-p
 ## 📁 Repository Structure
 
 ```
-source-driven-agent-framework/
+source-TRIO/
 ├── README.md
 ├── LICENSE
-├── agents/                         # Agent System Prompts (SOUL.md)
-│   ├── jarvis-arch/SOUL.md         #   Architect / Coordinator
-│   ├── researcher/SOUL.md          #   Code Archaeologist
-│   └── reviewer/SOUL.md            #   Logic Judge
+├── PROTOCOL.md                     # Workflow protocol (deployed to shared/)
+├── guard.sh                        # State-change enforcement script
+├── agents/                         # Agent definitions (SOUL.md + AGENTS.md)
+│   ├── jarvis-arch/
+│   │   ├── SOUL.md                 #   Identity: Architect / Coordinator
+│   │   └── AGENTS.md               #   Startup instructions (→ PROTOCOL.md)
+│   ├── researcher/
+│   │   ├── SOUL.md                 #   Identity: Code Archaeologist
+│   │   └── AGENTS.md               #   Startup instructions (→ PROTOCOL.md)
+│   └── reviewer/
+│       ├── SOUL.md                 #   Identity: Logic Judge
+│       └── AGENTS.md               #   Startup instructions (→ PROTOCOL.md)
 ├── configs/
 │   └── openclaw-example.yaml       # OpenClaw engine configuration example
-├── templates/                      # Blank templates - copy to start a new project
+├── templates/                      # Blank templates for project workspace
 │   ├── PROJECT.md
 │   ├── blackboard/
 │   │   ├── tasks-backlog.md
@@ -157,6 +181,22 @@ source-driven-agent-framework/
                 ├── task-01-init-flow.md     # Analysis task definition
                 ├── report-01-init-flow.md   # Researcher's analysis report
                 └── review-01-init-flow.md   # Reviewer's verification record
+```
+
+### Deployed File Layout
+
+After deployment, each agent's workspace looks like:
+
+```
+~/.openclaw/agents/shared/
+├── PROTOCOL.md                     # Single source of truth for workflow rules
+└── guard.sh                        # State-change enforcement
+
+~/.openclaw/agents/jarvis-arch/     # (researcher/ and reviewer/ same structure)
+├── SOUL.md                         # Identity (copied)
+├── AGENTS.md                       # Startup instructions (copied)
+├── PROTOCOL.md                     # → symlink → shared/PROTOCOL.md
+└── guard.sh                        # → symlink → shared/guard.sh
 ```
 
 ## 💡 Experience Accumulation

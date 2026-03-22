@@ -32,9 +32,82 @@
   .vs-title { font-weight: 600; font-size: 14px; margin-bottom: 8px; }
   .vs-left .vs-title { color: #f0883e; }
   .vs-right .vs-title { color: #58a6ff; }
+
+  /* 浮动导航栏 */
+  .floating-nav {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 220px;
+    max-height: calc(100vh - 40px);
+    overflow-y: auto;
+    background: #161b22;
+    border: 1px solid #30363d;
+    border-radius: 10px;
+    padding: 14px;
+    z-index: 1000;
+    font-size: 12px;
+    line-height: 1.8;
+    transition: opacity 0.2s;
+  }
+  .floating-nav:hover { opacity: 1 !important; }
+  .floating-nav .nav-title {
+    color: #58a6ff;
+    font-weight: 600;
+    font-size: 13px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .floating-nav a {
+    display: block;
+    color: #8b949e;
+    text-decoration: none;
+    padding: 2px 0;
+    border-left: 2px solid transparent;
+    padding-left: 8px;
+    transition: all 0.15s;
+  }
+  .floating-nav a:hover {
+    color: #c9d1d9;
+    border-left-color: #f0883e;
+  }
+  .floating-nav a.active {
+    color: #f0883e;
+    border-left-color: #f0883e;
+  }
+  .floating-nav.collapsed .nav-links { display: none; }
+  .floating-nav.collapsed { width: auto; }
+  body { padding-right: 260px; }
+
+  @media (max-width: 900px) {
+    .floating-nav { display: none; }
+    body { padding-right: 24px; }
+  }
 </style>
 </head>
 <body>
+
+<!-- 浮动导航栏 -->
+<nav class="floating-nav" id="floatingNav">
+  <div class="nav-title" onclick="this.parentElement.classList.toggle('collapsed')">📑 目录 ▾</div>
+  <div class="nav-links">
+    <a href="#sec-0">0. 与开发框架的区别</a>
+    <a href="#sec-1">1. 团队角色</a>
+    <a href="#sec-2">2. 分析驱动流程</a>
+    <a href="#sec-3">3. 目录结构</a>
+    <a href="#sec-4">4. 通信机制</a>
+    <a href="#sec-5">5. Reviewer 审查方法</a>
+    <a href="#sec-6">6. 代码访问策略</a>
+    <a href="#sec-7">7. 知识图谱维护</a>
+    <a href="#sec-8">8. 复盘与进化</a>
+    <a href="#sec-9">9. 部署与运转</a>
+    <a href="#sec-10">10. 设计决策汇总</a>
+    <a href="#sec-11">11. 流程协议分层</a>
+    <a href="#sec-12">12. Agent 人格定义</a>
+    <a href="#sec-changelog">Changelog</a>
+  </div>
+</nav>
 
 <p style="color: #8b949e; font-style: italic; font-size: 14px; margin-bottom: 24px; border-left: 3px solid #30363d; padding-left: 12px;">"The purpose of abstraction is not to be vague, but to create a new semantic level in which one can be absolutely precise." - Edsger Dijkstra</p>
 
@@ -42,7 +115,7 @@
 <p class="subtitle">通用代码分析/逆向工程架构 - 与具体项目无关 - Guodong × Jarvis - 2026.3.10</p>
 
 <!-- ==================== 0. 与开发框架的区别 ==================== -->
-<h2>0. 与开发框架的区别</h2>
+<h2 id="sec-0">0. 与开发框架的区别</h2>
 
 <div class="vs">
   <div class="vs-left">
@@ -77,7 +150,7 @@
 </div>
 
 <!-- ==================== 1. 团队角色 ==================== -->
-<h2>1. 团队角色</h2>
+<h2 id="sec-1">1. 团队角色</h2>
 
 <div class="mermaid">
 graph TB
@@ -108,7 +181,7 @@ graph TB
 </table>
 
 <!-- ==================== 2. 分析驱动流程 ==================== -->
-<h2>2. 分析驱动流程 (Source-Driven Analysis)</h2>
+<h2 id="sec-2">2. 分析驱动流程 (Source-Driven Analysis)</h2>
 
 <h3>2.1 两阶段流程</h3>
 
@@ -300,7 +373,7 @@ graph TD
 </div>
 
 <!-- ==================== 3. 目录结构 ==================== -->
-<h2>3. 目录结构</h2>
+<h2 id="sec-3">3. 目录结构</h2>
 
 <div class="file-tree">
   <span class="comment"># Agent 的"家" - 不随项目变</span><br><br>
@@ -392,7 +465,7 @@ graph TD
 </div>
 
 <!-- ==================== 4. 通信机制 ==================== -->
-<h2>4. 通信机制</h2>
+<h2 id="sec-4">4. 通信机制</h2>
 
 <p class="note">沿用开发框架的混合通信模型：消息传递（拍肩膀）+ 共享黑板（结构化数据交换）。</p>
 
@@ -466,7 +539,7 @@ sequenceDiagram
 </div>
 
 <!-- ==================== 5. Reviewer 审查方法 ==================== -->
-<h2>5. Reviewer 审查方法</h2>
+<h2 id="sec-5">5. Reviewer 审查方法</h2>
 
 <div class="decision">
   <div class="decision-title">代码分析审查 ≠ 代码开发审查</div>
@@ -536,7 +609,7 @@ sequenceDiagram
 </div>
 
 <!-- ==================== 6. 代码访问策略 ==================== -->
-<h2>6. 代码访问策略</h2>
+<h2 id="sec-6">6. 代码访问策略</h2>
 
 <div class="decision">
   <div class="decision-title">代码库不 clone 到项目目录</div>
@@ -555,7 +628,7 @@ sequenceDiagram
 </div>
 
 <!-- ==================== 7. 知识图谱维护 ==================== -->
-<h2>7. 知识图谱维护</h2>
+<h2 id="sec-7">7. 知识图谱维护</h2>
 
 <div class="decision">
   <div class="decision-title">渐进式拼图 vs 一次性交付</div>
@@ -607,7 +680,7 @@ sequenceDiagram
 </div>
 
 <!-- ==================== 8. 复盘与进化 ==================== -->
-<h2>8. 复盘与进化</h2>
+<h2 id="sec-8">8. 复盘与进化</h2>
 
 <p class="note">沿用开发框架的复盘机制，但复盘三问针对分析场景调整：</p>
 
@@ -629,7 +702,7 @@ sequenceDiagram
 </div>
 
 <!-- ==================== 9. 部署与运转 ==================== -->
-<h2>9. 部署与运转 (Deployment & Operations)</h2>
+<h2 id="sec-9">9. 部署与运转 (Deployment &amp; Operations)</h2>
 
 <div class="decision">
   <div class="decision-title">💡 最佳实践：前台路由模式 (Router Pattern)</div>
@@ -676,7 +749,7 @@ sequenceDiagram
 </div>
 
 <!-- ==================== 10. 设计决策汇总 ==================== -->
-<h2>10. 设计决策汇总</h2>
+<h2 id="sec-10">10. 设计决策汇总</h2>
 
 <div class="decision">
   <div class="decision-title">D1: Source-Driven Analysis - 源码是唯一 source of truth</div>
@@ -753,10 +826,160 @@ sequenceDiagram
   <div class="decision-body">当项目规模极大时，单一 knowledge-map.md 会 Token 爆炸。扩展方案：精简 global-map.md + 按业务域拆分 subsystem-maps/。V1.0 暂不实现。</div>
 </div>
 
-<!-- ==================== 11. Agent 人格定义与 TODO ==================== -->
-<h2>11. Agent 人格定义 (SOUL.md Templates)</h2>
+<!-- ==================== 11. 流程协议分层 (Protocol Layering) ==================== -->
+<h2 id="sec-11">11. 流程协议分层 (Protocol Layering)</h2>
 
-<h3>11.1 Researcher SOUL.md - "数据流探长"</h3>
+<h3>11.1 问题</h3>
+<p class="note">
+K1 U-Boot SPL 实战暴露了一个核心问题：<b>agent 不遵守设计者制定的流程协议</b>。<br><br>
+具体表现：Jarvis-Arch 擅自将串行流程改为并行，违反了状态机设计。由此引发通知丢失、级联返工风险、老板被迫人工催促等连锁问题。<br><br>
+根因分析：<br>
+1. <b>设计文档不参与运行时</b> - design-architecture.html 写得很详细（流程、时序图、状态机），但 agent 从未读过它。它是给人看的，不是给 agent 看的。<br>
+2. <b>SOUL.md 承担了过多职责</b> - 既管身份性格，又管流程规则，而且流程部分是 design-architecture.html 的压缩版，信息丢失不可避免。<br>
+3. <b>没有硬约束</b> - 所有流程规则都是提示词级别的软约束（"请遵守"），agent 可以自行判断"优化"而违反。
+</p>
+
+<h3>11.2 设计决策</h3>
+
+<div class="decision">
+  <div class="decision-title">D16: 职责分离 - SOUL.md vs PROTOCOL.md</div>
+  <div class="decision-body">
+    <b>SOUL.md</b> 只管身份、性格、禁忌（"你是谁"）。<br>
+    <b>PROTOCOL.md</b> 管流程、状态机、通信时序、guard 规则（"怎么做事"）。<br>
+    SOUL.md 中原有的"通信协议"、"三阶段职责"等流程内容迁移到 PROTOCOL.md，SOUL.md 瘦身。<br>
+    <b>冲突时以 PROTOCOL.md 为准。</b>
+  </div>
+</div>
+
+<div class="decision">
+  <div class="decision-title">D17: PROTOCOL.md 跟团队走，不跟项目走</div>
+  <div class="decision-body">
+    PROTOCOL.md 定义的是"这个团队怎么协作"，不会因分析的项目不同而变。因此它跟团队走，部署在 agent workspace 目录内。<br><br>
+    <b>部署方式：</b>PROTOCOL.md 存放在 <code>~/.openclaw/agents/shared/PROTOCOL.md</code>，三个 agent 的 workspace 内通过 symlink 指向同一份文件。<br>
+    <b>维护链路：</b><code>design-architecture.html（设计源）→ PROTOCOL.md（agent 可读版）→ 自动注入到执行上下文</code>。<br>
+    <b>更新时：</b>改 <code>~/.openclaw/agents/shared/PROTOCOL.md</code> 一个文件，三个 agent 同时生效。<br><br>
+    与项目级文件（PROJECT.md、tasks-backlog.md 等）的区别：<br>
+    - PROTOCOL.md = 团队协作规范（部署一次，跨项目复用）<br>
+    - PROJECT.md / .blackboard/* = 项目信息（每次新项目由 Jarvis-Arch 创建）
+  </div>
+</div>
+
+<div class="decision">
+  <div class="decision-title">D18: AGENTS.md 作为自动注入的启动指令</div>
+  <div class="decision-body">
+    OpenClaw 会将 AGENTS.md 自动注入到每个 session（包括 sessions_spawn 创建的 session），这是唯一可以 100% 保证 agent 看到的投递渠道（除 SOUL.md 外）。<br><br>
+    利用这一机制，为每个 agent 部署一份极简的 AGENTS.md，核心作用是强制 agent 启动时读取本目录下的 PROTOCOL.md。替换 OpenClaw 默认 AGENTS.md 模板中与 source-TRIO 无关的通用内容。<br><br>
+    <b>AGENTS.md 内容：</b><br>
+    <code>
+    # AGENTS.md<br>
+    在执行任何操作之前，必须先读取以下文件：<br>
+    1. SOUL.md - 你的身份<br>
+    2. PROTOCOL.md（本目录下）- 流程协议，权威文档，一切流程以此为准<br>
+    未读 PROTOCOL.md 就开始工作 = 违规。
+    </code>
+  </div>
+</div>
+
+<div class="decision">
+  <div class="decision-title">D19: guard.sh - 关键规则的代码级硬约束</div>
+  <div class="decision-body">
+    在状态变更前，agent 必须调用 <code>guard.sh</code> 做合规检查。脚本返回非零退出码则禁止操作。<br>
+    例：已有 <code>[Analyzing]</code> 状态的任务时，禁止将新任务改为 <code>[Analyzing]</code>（串行强制）。<br>
+    guard.sh 跟 PROTOCOL.md 一起部署在 <code>~/.openclaw/agents/shared/</code>，symlink 到各 agent workspace。PROTOCOL.md 中写明调用规则。<br>
+    虽非 100% 防弹（agent 仍可跳过），但将规则从"理解文字"变为"运行命令看结果"，LLM 遵从率显著提高。
+  </div>
+</div>
+
+<h3>11.3 部署结构</h3>
+
+<p class="note">
+  <b>设计目标：</b>用户搭建好团队后，不再需要访问 git clone。告诉 Jarvis-Arch "分析什么、代码在哪"即可开始工作。
+</p>
+
+<div class="file-tree">
+  <span class="comment"># 共享文件（一次性部署，跨项目复用）</span><br>
+  <span class="dir">~/.openclaw/agents/shared/</span><br>
+  <div class="indent">
+    <span class="file">PROTOCOL.md</span> <span class="comment"># 流程协议（从 design-architecture.html 提取）</span><br>
+    <span class="file">guard.sh</span> <span class="comment"># 状态变更合规检查脚本</span><br>
+  </div>
+  <br>
+  <span class="comment"># 各 Agent workspace（三份文件：AGENTS.md + SOUL.md + PROTOCOL.md symlink）</span><br>
+  <span class="dir">~/.openclaw/agents/jarvis-arch/</span><br>
+  <div class="indent">
+    <span class="file">AGENTS.md</span> <span class="comment"># 极简启动指令（"读 PROTOCOL.md"）</span><br>
+    <span class="file">SOUL.md</span> <span class="comment"># 身份 + 性格（不含流程规则）</span><br>
+    <span class="file">PROTOCOL.md</span> <span class="comment"># → symlink → shared/PROTOCOL.md</span><br>
+    <span class="file">guard.sh</span> <span class="comment"># → symlink → shared/guard.sh</span><br>
+  </div>
+  <br>
+  <span class="dir">~/.openclaw/agents/researcher/</span><br>
+  <div class="indent">
+    <span class="file">AGENTS.md</span> <span class="comment"># 同上</span><br>
+    <span class="file">SOUL.md</span><br>
+    <span class="file">PROTOCOL.md</span> <span class="comment"># → symlink</span><br>
+    <span class="file">guard.sh</span> <span class="comment"># → symlink</span><br>
+  </div>
+  <br>
+  <span class="dir">~/.openclaw/agents/reviewer/</span><br>
+  <div class="indent">
+    <span class="file">AGENTS.md</span> <span class="comment"># 同上</span><br>
+    <span class="file">SOUL.md</span><br>
+    <span class="file">PROTOCOL.md</span> <span class="comment"># → symlink</span><br>
+    <span class="file">guard.sh</span> <span class="comment"># → symlink</span><br>
+  </div>
+  <br>
+  <span class="comment"># 项目 workspace（每次新项目由 Jarvis-Arch 创建）</span><br>
+  <span class="dir">~/projects/&lt;project-name&gt;/</span><br>
+  <div class="indent">
+    <span class="file">PROJECT.md</span><br>
+    <span class="dir">.blackboard/</span><br>
+    <div class="indent">
+      <span class="file">tasks-backlog.md</span><br>
+      <span class="file">task.md</span><br>
+      <span class="file">knowledge-map.md</span><br>
+      <span class="file">SYMBOL_INDEX.md</span><br>
+      <span class="file">review.md</span><br>
+      <span class="file">decisions.md</span><br>
+      <span class="file">retro.md</span><br>
+    </div>
+    <span class="dir">analysis/</span><br>
+  </div>
+</div>
+
+<h3>11.4 部署步骤</h3>
+
+<div class="decision">
+  <div class="decision-body">
+    <b>一次性部署（搭建团队）：</b><br><br>
+    <code>
+    # 1. 创建 agent<br>
+    openclaw agents add jarvis-arch --model &lt;model-id&gt;<br>
+    openclaw agents add researcher --model &lt;model-id&gt;<br>
+    openclaw agents add reviewer --model &lt;model-id&gt;<br><br>
+    # 2. 部署共享协议<br>
+    mkdir -p ~/.openclaw/agents/shared/<br>
+    cp PROTOCOL.md ~/.openclaw/agents/shared/PROTOCOL.md<br>
+    cp guard.sh ~/.openclaw/agents/shared/guard.sh<br><br>
+    # 3. 部署各 agent 文件<br>
+    for agent in jarvis-arch researcher reviewer; do<br>
+    &nbsp;&nbsp;cp agents/$agent/SOUL.md ~/.openclaw/agents/$agent/SOUL.md<br>
+    &nbsp;&nbsp;cp agents/$agent/AGENTS.md ~/.openclaw/agents/$agent/AGENTS.md<br>
+    &nbsp;&nbsp;ln -sf ~/.openclaw/agents/shared/PROTOCOL.md ~/.openclaw/agents/$agent/PROTOCOL.md<br>
+    &nbsp;&nbsp;ln -sf ~/.openclaw/agents/shared/guard.sh ~/.openclaw/agents/$agent/guard.sh<br>
+    done
+    </code><br><br>
+    <b>使用（分析新项目）：</b><br><br>
+    直接告诉 Jarvis-Arch：<br>
+    <code>"分析 K1 U-Boot SPL patchset，代码在 ~/code/u-boot/"</code><br><br>
+    Jarvis-Arch 自动执行 Phase 1（侦察、初始化 .blackboard/、写 PROJECT.md），然后驱动 Phase 2、Phase 3。用户无需再操心流程细节。
+  </div>
+</div>
+
+<!-- ==================== 12. Agent 人格定义与 TODO ==================== -->
+<h2 id="sec-12">12. Agent 人格定义 (SOUL.md Templates)</h2>
+
+<h3>12.1 Researcher SOUL.md - "数据流探长"</h3>
 <div class="decision">
   <div class="decision-body">
     <b>== Core Principles ==</b><br><br>
@@ -792,7 +1015,7 @@ sequenceDiagram
   </div>
 </div>
 
-<h3>11.2 Reviewer SOUL.md - "逻辑审判官"</h3>
+<h3>12.2 Reviewer SOUL.md - "逻辑审判官"</h3>
 <div class="decision">
   <div class="decision-body">
     <b>== Core Principles ==</b><br><br>
@@ -834,7 +1057,7 @@ sequenceDiagram
   </div>
 </div>
 
-<h3>11.3 Jarvis-Arch SOUL.md - "知识压缩器与状态机"</h3>
+<h3>12.3 Jarvis-Arch SOUL.md - "知识压缩器与状态机"</h3>
 <div class="decision">
   <div class="decision-body">
     <b>== Core Principles ==</b><br><br>
@@ -864,7 +1087,7 @@ sequenceDiagram
   </div>
 </div>
 
-<h3>11.4 待办清单</h3>
+<h3>12.4 待办清单</h3>
 <p class="note">
   ☑ 根据 11.1 写 Researcher 的 SOUL.md（已完成 agents/researcher/SOUL.md）<br>
   ☑ 根据 11.2 写 Reviewer 的 SOUL.md（已完成 agents/reviewer/SOUL.md）<br>
@@ -875,8 +1098,19 @@ sequenceDiagram
 </p>
 
 <!-- ==================== Changelog ==================== -->
-<h2>Changelog</h2>
+<h2 id="sec-changelog">Changelog</h2>
 <div class="file-tree">
+  <span class="comment">## [2026-03-21 21:30 EDT] [Jarvis]</span><br>
+  <span class="comment">- **Based on**: K1 U-Boot SPL 实战复盘 + Guodong 指导</span><br>
+  <span class="comment">- **Why**: Agent 不遵守设计者制定的流程协议（Jarvis-Arch 擅自并行化串行流程），根因：design-architecture.html 不参与运行时、SOUL.md 承担过多职责、无硬约束</span><br>
+  <span class="comment">- **What**: 新增 §11 流程协议分层（Protocol Layering）</span><br>
+  <span class="comment">  - D16: SOUL.md/PROTOCOL.md 职责分离（身份 vs 流程）</span><br>
+  <span class="comment">  - D17: PROTOCOL.md 跟团队走（symlink 共享），不跟项目走</span><br>
+  <span class="comment">  - D18: AGENTS.md 自动注入启动指令（指向 PROTOCOL.md）</span><br>
+  <span class="comment">  - D19: guard.sh 代码级硬约束</span><br>
+  <span class="comment">  - §11.3 部署结构 + §11.4 部署步骤（一次性搭建 + 使用分离）</span><br>
+  <span class="comment">  - 原 §11 Agent 人格定义改为 §12</span><br>
+  <span class="comment">---</span><br>
   <span class="comment">## [2026-03-10 06:25 EDT] [Jarvis]</span><br>
   <span class="comment">- **Based on**: Gemini v2.0 补充（6 个章节整合）</span><br>
   <span class="comment">- 新增 Jarvis-Arch 角色（前台路由模式：日常 Jarvis 路由 → Jarvis-Arch 执行）</span><br>
@@ -922,5 +1156,30 @@ sequenceDiagram
       fontSize: '13px'
     }
   });
+
+  // 浮动导航 scroll spy
+  (function() {
+    const nav = document.getElementById('floatingNav');
+    const links = nav.querySelectorAll('a[href^="#sec-"]');
+    const sections = Array.from(links).map(a => document.getElementById(a.getAttribute('href').slice(1))).filter(Boolean);
+
+    // 滚动时淡入淡出
+    let scrollTimer;
+    nav.style.opacity = '0.6';
+    window.addEventListener('scroll', function() {
+      nav.style.opacity = '1';
+      clearTimeout(scrollTimer);
+      scrollTimer = setTimeout(() => { nav.style.opacity = '0.6'; }, 1500);
+
+      // 高亮当前章节
+      let current = '';
+      for (const sec of sections) {
+        if (sec.getBoundingClientRect().top <= 80) current = sec.id;
+      }
+      links.forEach(a => {
+        a.classList.toggle('active', a.getAttribute('href') === '#' + current);
+      });
+    });
+  })();
 </script>
 </html>
