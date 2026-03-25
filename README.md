@@ -203,6 +203,16 @@ After deployment, each agent's workspace looks like:
 
 "Permanent team, rotating projects." When a project wraps up, don't delete the agents. Append lessons learned to each agent's `MEMORY.md` (SOUL.md is read-only - only the human owner modifies it). Your team gets sharper with every project.
 
+## 🔧 Maintaining the Framework
+
+The design source of truth is `docs/design-architecture.html`. PROTOCOL.md is derived from it.
+
+**Any workflow change must follow this order:**
+1. **First** update `docs/design-architecture.html` (the design source)
+2. **Then** sync the change to `PROTOCOL.md` (the agent-readable version)
+
+Never modify PROTOCOL.md first. Design source is upstream, PROTOCOL is downstream.
+
 ## Three-Phase Workflow
 
 ![Three-Phase Analysis Flow](https://github.com/user-attachments/assets/dd2fc060-7bdf-4039-897f-0ca1420db382)
