@@ -739,7 +739,19 @@ sequenceDiagram
   <div class="decision-title">分级地图 (Tiered Knowledge Map)</div>
   <div class="decision-body">
     当项目极大（如 Linux Kernel 成百上千个驱动）时，单一 knowledge-map.md 会膨胀到十几万字，导致 Token 爆炸和 Agent 抓错重点。<br><br>
-    扩展方案：维持一个极其精简的 <code>global-map.md</code>（只记录子系统级别的调用），在 <code>.blackboard/subsystem-maps/</code> 下按业务域拆分（如 <code>usb-map.md</code>、<code>memory-map.md</code>）。V1.0 暂不实现，留作未来扩展。
+    <b>分级方案：</b><br>
+    - <code>global-map.md</code>：极精简，只记录子系统间的接口、调用关系和共享数据结构<br>
+    - <code>.blackboard/subsystem-maps/</code>：按业务域拆分（如 <code>usb-map.md</code>、<code>memory-map.md</code>），记录子系统内部细节<br><br>
+    <b>生成规则：</b><br>
+    - <b>Phase 1 决定</b>：Jarvis-Arch 侦察代码库后，与人类工程师讨论决定是否需要分级、如何划分子系统边界。决定记录在 PROJECT.md 中<br>
+    - <b>初始生成</b>：Phase 1 由 Jarvis-Arch 生成 global-map.md 初始框架和 subsystem-maps/ 目录结构<br><br>
+    <b>所有权与更新：</b><br>
+    - <b>只有 Jarvis-Arch 能修改</b> global-map.md 和 subsystem-maps/*.md<br>
+    - Phase 2 每个模块完成后，Jarvis-Arch 增量更新对应的 subsystem map<br>
+    - 接口级变化（子系统间新增调用关系、共享数据结构变更）同步到 global-map.md，子系统内部细节不传导<br><br>
+    <b>Researcher 读取规则：</b><br>
+    - Researcher <b>只读 task.md 里显式指定的 map</b>，不自行加载其他 map<br>
+    - Jarvis-Arch 在每个 task.md 中明确列出该任务需要加载的 map 文件（global-map.md + 相关 subsystem map）
   </div>
 </div>
 
@@ -875,8 +887,8 @@ sequenceDiagram
 </div>
 
 <div class="decision">
-  <div class="decision-title">D15: 大型项目知识图谱分级（未来扩展）</div>
-  <div class="decision-body">当项目规模极大时，单一 knowledge-map.md 会 Token 爆炸。扩展方案：精简 global-map.md + 按业务域拆分 subsystem-maps/。V1.0 暂不实现。</div>
+  <div class="decision-title">D15: 大型项目知识图谱分级</div>
+  <div class="decision-body">当项目规模极大时，单一 knowledge-map.md 会 Token 爆炸。分级方案：精简 global-map.md + 按业务域拆分 subsystem-maps/。Phase 1 由 Jarvis-Arch 与人类工程师讨论决定。详见 §8b。</div>
 </div>
 
 <!-- ==================== 11. 流程协议分层 (Protocol Layering) ==================== -->

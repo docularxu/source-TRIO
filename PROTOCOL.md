@@ -328,7 +328,24 @@ Researcher 输出的分析文档必须包含以下结构（缺一不可）：
 
 ### 分级地图 (Tiered Knowledge Map)
 
-当项目极大时，单一 knowledge-map.md 会膨胀导致 Token 爆炸。扩展方案：精简 `global-map.md`（只记子系统级调用）+ `.blackboard/subsystem-maps/` 按业务域拆分。V1.0 暂不实现。
+当项目极大时，单一 knowledge-map.md 会膨胀导致 Token 爆炸。
+
+**分级方案**：
+- `global-map.md`：极精简，只记子系统间的接口、调用关系和共享数据结构
+- `.blackboard/subsystem-maps/`：按业务域拆分（如 `usb-map.md`、`memory-map.md`），记录子系统内部细节
+
+**生成规则**：
+- **Phase 1 决定**：Jarvis-Arch 侦察后与人类工程师讨论，决定是否分级、如何划分子系统。决定记录在 PROJECT.md
+- **初始生成**：Phase 1 由 Jarvis-Arch 生成 global-map.md 初始框架 + subsystem-maps/ 目录结构
+
+**所有权与更新**：
+- **只有 Jarvis-Arch 能修改** global-map.md 和 subsystem-maps/*.md
+- Phase 2 每个模块完成后，增量更新对应的 subsystem map
+- 接口级变化同步到 global-map.md，子系统内部细节不传导
+
+**Researcher 读取规则**：
+- Researcher **只读 task.md 里显式指定的 map**，不自行加载其他 map
+- Jarvis-Arch 在每个 task.md 中明确列出该任务需要加载的 map 文件
 
 ### 上下文剪枝 (Context Pruning)
 
