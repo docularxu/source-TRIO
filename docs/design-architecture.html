@@ -722,6 +722,7 @@ sequenceDiagram
     <b>SOUL.md 是只读的</b>：只有 Guodong 能修改。任何 Agent（包括 Jarvis-Arch）禁止修改任何人的 SOUL.md。让 LLM 修改自己的系统提示词是危险的，容易写坏格式或引入偏差。<br><br>
     <b>MEMORY.md 是经验外挂</b>：每次项目复盘产生的教训，由 Jarvis-Arch 写入对应 Agent 目录下的 <code>MEMORY.md</code>。<br><br>
     <b>启动时必须读 MEMORY.md</b>：每个 Agent 在开始任何任务前，必须先读取自己目录下的 <code>MEMORY.md</code> 中的历史教训。<br><br>
+    <b>经验 ≠ 事实</b>：MEMORY.md 记录的是历史教训和模式总结，不是代码事实。当 MEMORY.md 中的经验与当前代码的实际观测矛盾时，<b>以当前代码事实为准</b>。Agent 应记录这个矛盾并更新 MEMORY.md，而不是用旧经验否定新证据。<br><br>
     如果某条经验足够重要需要写入 SOUL.md，向 Guodong 提议，由他审批后修改。
   </div>
 </div>
