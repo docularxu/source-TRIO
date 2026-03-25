@@ -67,6 +67,7 @@
 - 收到任务 → 按启动检查清单读取上下文 → 开始分析
 - 完成 → 写 `analysis/NN-module.md` + 更新 `tasks-backlog.md` 为 `[Reviewing]` → 通知 Reviewer
 - 收到 review 打回 → 读 `review.md` → 修正分析 → 通知 Reviewer
+- **Reviewer 的 CLI 验证证据（附带行号和命令输出）优先于你的语义推论。** 当 Reviewer 用 sed/grep 证明你的引用或结论有误时，以 Reviewer 的物理证据为准，不要争辩。
 - 3 轮未过 → 通知 Jarvis-Arch，状态标记为 `[Escalated]`
 
 ## 禁止事项

@@ -43,6 +43,8 @@
 
 **一个模块走完整个 1-10 循环后，才能开始下一个模块。**
 
+**调用链追踪深度限制：** Researcher 追踪调用链超过 task.md 指定的层数（默认 5 层）仍未到达边界时，必须暂停并向 Jarvis-Arch 汇报当前位置和困难，由 Jarvis-Arch 决定是继续深追、缩小范围、还是标记 [PENDING] 跳过。禁止无限追踪。
+
 ### Phase 3: 整合报告
 - Jarvis-Arch 基于所有 analysis/*.md + knowledge-map.md + retro.md 整合 REPORT.md
 - 老板 sign-off 后项目结束
@@ -288,6 +290,15 @@ Researcher 输出的分析文档必须包含以下结构（缺一不可）：
 - ...
 ```
 
+### 上下文剪枝 (Context Pruning)
+
+分析大型代码库时，Researcher 频繁读取源码会快速耗尽 Token 预算。Jarvis-Arch 负责上下文管理：
+
+- **task.md 精准聚焦**：每个 task.md 必须明确限定分析范围和入口点，避免 Researcher 发散
+- **knowledge-map.md 只保留核心**：已确认结论只记系统级契约和核心接口，模块内部细节留在 analysis/*.md
+- **Researcher 上下文隔离**：每个 Researcher session 只加载当前模块的 task.md + knowledge-map.md + SYMBOL_INDEX.md，不加载其他模块的 analysis/*.md（除非 task.md 显式指定）
+- **大文件处理**：Researcher 读源码时应按函数/代码块精确定位（`sed -n 'start,endp'`），禁止整文件读取
+
 ## 12. 代码访问策略
 
 代码库可能很大（Linux kernel、U-Boot 等），不 clone 到项目目录或 agent workspace。
@@ -302,6 +313,8 @@ Researcher 输出的分析文档必须包含以下结构（缺一不可）：
 - 分析的 commit hash 或 tag（锁定版本，防止代码变动导致行号失效）
 - 本地 clone 路径（如有）
 - 访问方式（local / github-api / web）
+
+**路径准确性规则：** 所有 CLI 命令（sed/grep/cat）必须使用相对于代码库根目录的完整路径，禁止依赖当前工作目录（CWD）。大型项目（如 Linux kernel）存在大量同名文件，依赖 CWD 会导致读错文件、引用失效。
 
 ## 13. 复盘
 
