@@ -69,10 +69,11 @@ openclaw agents add jarvis-arch --model <your-model-id>
 openclaw agents add researcher --model <your-model-id>
 openclaw agents add reviewer --model <your-model-id>
 
-# Deploy shared protocol (one copy, shared by all agents)
+# Deploy shared protocol, templates (one copy, shared by all agents)
 mkdir -p ~/.openclaw/agents/shared/
 cp PROTOCOL.md ~/.openclaw/agents/shared/PROTOCOL.md
 cp guard.sh    ~/.openclaw/agents/shared/guard.sh
+cp -r templates/ ~/.openclaw/agents/shared/templates/
 
 # Deploy per-agent files (SOUL.md + AGENTS.md + symlinks)
 for agent in jarvis-arch researcher reviewer; do
@@ -104,10 +105,11 @@ If agents are already deployed and you've pulled a new version of this repo, upd
 ```bash
 cd ~/path/to/source-TRIO   # your local clone
 
-# Update shared protocol
+# Update shared protocol + templates
 mkdir -p ~/.openclaw/agents/shared/
 cp PROTOCOL.md ~/.openclaw/agents/shared/PROTOCOL.md
 cp guard.sh    ~/.openclaw/agents/shared/guard.sh
+cp -r templates/ ~/.openclaw/agents/shared/templates/
 
 # Update per-agent framework files (SOUL.md + AGENTS.md + symlinks)
 for agent in jarvis-arch researcher reviewer; do
@@ -221,7 +223,10 @@ After deployment, each agent's workspace looks like:
 ```
 ~/.openclaw/agents/shared/
 ├── PROTOCOL.md                     # Single source of truth for workflow rules
-└── guard.sh                        # State-change enforcement
+├── guard.sh                        # State-change enforcement
+└── templates/                      # Project workspace templates
+    ├── PROJECT.md                  #   (copied to .blackboard/ at Phase 1)
+    └── blackboard/                 #   tasks-backlog, knowledge-map, etc.
 
 ~/.openclaw/agents/jarvis-arch/     # (researcher/ and reviewer/ same structure)
 ├── SOUL.md                         # Identity (copied)

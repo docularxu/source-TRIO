@@ -190,7 +190,7 @@ graph TB
   <div class="decision-title">Phase 1: 侦察与规划 (Reconnaissance)</div>
   <div class="decision-body">
     <b>Step 1 - 目标对齐</b>：Guodong 提出初始分析目标（可能模糊），Jarvis-Arch 通过直接对话反复追问、澄清模糊地带，双方确认分析范围与边界后再开始侦察。必须确认的项包括：分析范围、关注点、已知入口、<b>目标编译配置</b>（defconfig / 关键 CONFIG 选项，决定 #ifdef 分支走向）。<br>
-    <b>Step 2 - 代码侦察</b>：Jarvis-Arch 对代码库做初步侦察（目录结构、构建系统、入口点识别），产出 <b>PROJECT.md</b>（项目概览 + 模块拆分 + 分析计划）+ <b>SYMBOL_INDEX.md</b>（全局符号表）。<br>
+    <b>Step 2 - 项目初始化与代码侦察</b>：Jarvis-Arch 从 <code>shared/templates/</code> 复制模板到项目的 <code>.blackboard/</code> 目录作为起点，然后对代码库做初步侦察（目录结构、构建系统、入口点识别），在模板基础上填写 <b>PROJECT.md</b>（项目概览 + 模块拆分 + 分析计划）+ <b>SYMBOL_INDEX.md</b>（全局符号表）。模板定义了必填字段（编译配置、代码库信息等），Jarvis-Arch 根据具体项目有自主权增删其他字段，但必填字段不能跳过。<br>
     <b>Step 3 - 计划审查</b>：Reviewer 审查分析计划的合理性（模块边界是否清晰、有无遗漏的子系统）。<br>
     <b>Step 4 - Sign-off</b>：Guodong 确认后进入 Phase 2。<br><br>
     <b>与开发框架的区别</b>：Phase 1 不是写 spec，而是<b>画地图</b> - 搞清楚要分析的领地有多大、从哪里入手。目标对齐是第一步，因为分析方向错了后面全白做。<br><br>
