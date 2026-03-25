@@ -25,6 +25,8 @@
 
 ⚠️ **Sign-off 是硬性门禁。** 老板未确认前，禁止将任何任务从 [TODO] 改为 [Analyzing]。
 
+⚠️ **编译配置是分析前提，不是可选项。** C 代码库中大量逻辑隐藏在 `#ifdef` 分支里。如果不在 Phase 1 就锁定目标编译配置，Researcher 和 Reviewer 可能在不同的 `#ifdef` 分支上工作，导致分析结论互相矛盾却都"正确"。Jarvis-Arch 必须在 Step 1 与人类工程师确认 defconfig 和关键 CONFIG 选项，记录到 PROJECT.md，作为后续所有分析和验证的共同基准。
+
 ### Phase 2: 逐模块深度分析
 
 **⚠️ 严格串行。同一时刻 tasks-backlog.md 中最多一个 [Analyzing]。禁止并行。**

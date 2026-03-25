@@ -193,7 +193,8 @@ graph TB
     <b>Step 2 - 代码侦察</b>：Jarvis-Arch 对代码库做初步侦察（目录结构、构建系统、入口点识别），产出 <b>PROJECT.md</b>（项目概览 + 模块拆分 + 分析计划）+ <b>SYMBOL_INDEX.md</b>（全局符号表）。<br>
     <b>Step 3 - 计划审查</b>：Reviewer 审查分析计划的合理性（模块边界是否清晰、有无遗漏的子系统）。<br>
     <b>Step 4 - Sign-off</b>：Guodong 确认后进入 Phase 2。<br><br>
-    <b>与开发框架的区别</b>：Phase 1 不是写 spec，而是<b>画地图</b> - 搞清楚要分析的领地有多大、从哪里入手。目标对齐是第一步，因为分析方向错了后面全白做。
+    <b>与开发框架的区别</b>：Phase 1 不是写 spec，而是<b>画地图</b> - 搞清楚要分析的领地有多大、从哪里入手。目标对齐是第一步，因为分析方向错了后面全白做。<br><br>
+    <b>⚠️ 编译配置是分析前提，不是可选项。</b>C 代码库中大量逻辑隐藏在 <code>#ifdef</code> 分支里（如 <code>CONFIG_SPL_BUILD</code>、<code>CONFIG_ARM64</code>）。如果不在 Phase 1 就锁定目标编译配置，Researcher 和 Reviewer 可能在不同的 <code>#ifdef</code> 分支上工作，导致分析结论互相矛盾却都"正确"。Jarvis-Arch 必须在 Step 1 与人类工程师确认 defconfig 和关键 CONFIG 选项，并记录到 PROJECT.md 中，作为后续所有分析和验证的共同基准。
   </div>
 </div>
 
