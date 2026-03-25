@@ -18,7 +18,7 @@
 ## 3. 三阶段流程
 
 ### Phase 1: 侦察与规划
-1. **目标对齐**: 与老板反复对话，澄清分析目标和边界
+1. **目标对齐**: 与老板反复对话，澄清分析目标和边界。必须确认：分析范围、关注点、已知入口、**目标编译配置**（defconfig / 关键 CONFIG 选项，决定 #ifdef 分支走向）
 2. **代码侦察**: 侦察代码库（目录结构、构建系统、入口点），产出 PROJECT.md + SYMBOL_INDEX.md + tasks-backlog.md + knowledge-map.md 初版
 3. **计划审查**: Reviewer 审查分析计划
 4. **Sign-off**: 老板确认后进入 Phase 2
@@ -248,6 +248,8 @@ Researcher 输出的分析文档必须包含以下结构（缺一不可）：
 ### 证据优先原则
 当 Reviewer 使用 CLI 命令产出物理证据证明 Researcher 的引用或结论有误时，**Reviewer 的物理证据优先于 Researcher 的语义推论**。Researcher 不得与带有 CLI 验证输出的否定意见争辩，应根据证据修正分析。裁决依据是可验证的物理事实，不是谁的论证更"合理"。
 
+**预处理条件约束**：涉及 `#ifdef` 条件编译区域的代码引用，验证方必须基于 PROJECT.md 中记录的目标编译配置判断该代码路径是否活跃。对死代码路径（当前编译配置下不会编译的代码）的引用不构成有效证据。
+
 ## 11. 知识图谱维护
 
 - Jarvis-Arch 在每个模块通过后更新 knowledge-map.md
@@ -307,6 +309,7 @@ Researcher 输出的分析文档必须包含以下结构（缺一不可）：
 - 分析的 commit hash 或 tag（锁定版本，防止代码变动导致行号失效）
 - 本地 clone 路径（如有）
 - 访问方式（local / github-api / web）
+- 目标编译配置：defconfig 名称 + 关键 CONFIG 选项（决定 #ifdef 分支走向，所有 agent 必须基于同一配置分析）
 
 **路径准确性规则：** 所有 CLI 命令（sed/grep/cat）必须使用相对于代码库根目录的完整路径，禁止依赖当前工作目录（CWD）。大型项目（如 Linux kernel）存在大量同名文件，依赖 CWD 会导致读错文件、引用失效。
 

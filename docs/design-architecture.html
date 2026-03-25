@@ -189,7 +189,7 @@ graph TB
 <div class="decision">
   <div class="decision-title">Phase 1: 侦察与规划 (Reconnaissance)</div>
   <div class="decision-body">
-    <b>Step 1 - 目标对齐</b>：Guodong 提出初始分析目标（可能模糊），Jarvis-Arch 通过直接对话反复追问、澄清模糊地带，双方确认分析范围与边界后再开始侦察。<br>
+    <b>Step 1 - 目标对齐</b>：Guodong 提出初始分析目标（可能模糊），Jarvis-Arch 通过直接对话反复追问、澄清模糊地带，双方确认分析范围与边界后再开始侦察。必须确认的项包括：分析范围、关注点、已知入口、<b>目标编译配置</b>（defconfig / 关键 CONFIG 选项，决定 #ifdef 分支走向）。<br>
     <b>Step 2 - 代码侦察</b>：Jarvis-Arch 对代码库做初步侦察（目录结构、构建系统、入口点识别），产出 <b>PROJECT.md</b>（项目概览 + 模块拆分 + 分析计划）+ <b>SYMBOL_INDEX.md</b>（全局符号表）。<br>
     <b>Step 3 - 计划审查</b>：Reviewer 审查分析计划的合理性（模块边界是否清晰、有无遗漏的子系统）。<br>
     <b>Step 4 - Sign-off</b>：Guodong 确认后进入 Phase 2。<br><br>
@@ -608,7 +608,8 @@ sequenceDiagram
   <div class="decision-body">
     当 Reviewer 使用 CLI 命令（sed/grep）产出物理证据证明 Researcher 的引用或结论有误时，<b>Reviewer 的物理证据优先于 Researcher 的语义推论</b>。<br><br>
     Researcher 不得与带有 CLI 验证输出的否定意见争辩 - 应根据证据修正自己的分析。<br><br>
-    这条规则确保了 review 争议的裁决依据是<b>可验证的物理事实</b>，而非谁的论证更"合理"。
+    这条规则确保了 review 争议的裁决依据是<b>可验证的物理事实</b>，而非谁的论证更"合理"。<br><br>
+    <b>预处理条件约束：</b>涉及 <code>#ifdef</code> 条件编译区域的代码引用，验证方必须基于 PROJECT.md 中记录的目标编译配置判断该代码路径是否活跃。对死代码路径（当前编译配置下不会编译的代码）的引用不构成有效证据。
   </div>
 </div>
 
@@ -647,7 +648,8 @@ sequenceDiagram
     - 仓库 URL<br>
     - 分析的 commit hash 或 tag（锁定版本）<br>
     - 本地 clone 路径（如有）<br>
-    - 访问方式（local / github-api / web）<br><br>
+    - 访问方式（local / github-api / web）<br>
+    - <b>目标编译配置</b>：defconfig 名称 + 关键 CONFIG 选项（决定 #ifdef 分支走向，所有 agent 必须基于同一配置分析）<br><br>
     <b>路径准确性规则：</b>所有 CLI 命令（sed/grep/cat）必须使用相对于代码库根目录的完整路径，禁止依赖当前工作目录（CWD）。大型项目（如 Linux kernel）存在大量同名文件，依赖 CWD 会导致读错文件、引用失效。
   </div>
 </div>
