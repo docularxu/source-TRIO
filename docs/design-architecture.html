@@ -477,9 +477,14 @@ graph TD
     Researcher 在开始新模块分析前必须先读知识图谱，获取前序模块的上下文。<br><br>
     <b>⚠️ 大型项目扩展：分级地图</b><br>
     当项目极大（如 Linux Kernel 成百上千个驱动）时，单一 knowledge-map.md 会膨胀到十几万字，导致 Token 爆炸和 Agent 抓错重点。<br>
-    扩展方案：维持一个极其精简的 <code>global-map.md</code>（只记录子系统级别的调用），在 <code>.blackboard/subsystem-maps/</code> 下按业务域拆分（如 <code>usb-map.md</code>、<code>memory-map.md</code>）。V1.0 暂不实现，留作未来扩展。<br><br>
-    <b>⚠️ 上下文剪枝 (Context Pruning)</b><br>
-    分析大型代码库时，Researcher 频繁读取源码会快速耗尽 Token 预算。Jarvis-Arch 负责上下文管理：<br>
+    扩展方案：维持一个极其精简的 <code>global-map.md</code>（只记录子系统级别的调用），在 <code>.blackboard/subsystem-maps/</code> 下按业务域拆分（如 <code>usb-map.md</code>、<code>memory-map.md</code>）。V1.0 暂不实现，留作未来扩展。
+  </div>
+</div>
+
+<div class="decision">
+  <div class="decision-title">上下文剪枝 (Context Pruning)</div>
+  <div class="decision-body">
+    分析大型代码库时，Researcher 频繁读取源码会快速耗尽 Token 预算。Jarvis-Arch 负责上下文管理：<br><br>
     - <b>task.md 精准聚焦</b>：每个 task.md 必须明确限定分析范围和入口点，避免 Researcher 发散<br>
     - <b>knowledge-map.md 只保留核心</b>：已确认结论只记系统级契约和核心接口，模块内部细节留在 analysis/*.md<br>
     - <b>Researcher 上下文隔离</b>：每个 Researcher session 只加载当前模块的 task.md + knowledge-map.md + SYMBOL_INDEX.md，不加载其他模块的 analysis/*.md（除非 task.md 显式指定）<br>
